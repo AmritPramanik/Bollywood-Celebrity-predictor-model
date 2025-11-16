@@ -1,5 +1,4 @@
-from keras_vggface.utils import preprocess_input
-from keras_vggface.vggface import VGGFace
+from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 import numpy as np
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
@@ -10,11 +9,12 @@ from PIL import Image
 feature_list = np.array(pickle.load(open('embedding.pkl','rb')))
 filenames = pickle.load(open('filenames.pkl','rb'))
 
-model = VGGFace(model='resnet50',include_top=False,input_shape=(224,224,3),pooling='avg')
+model = ResNet50(weights='imagenet', include_top=False,
+                 input_shape=(224, 224, 3), pooling='avg')
 
 detector = MTCNN()
 # load img -> face detection
-sample_img = cv2.imread('sample/satya.jpg')
+sample_img = cv2.imread('sample/img1.jpg')
 results = detector.detect_faces(sample_img)
 
 x,y,width,height = results[0]['box']
